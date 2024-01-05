@@ -1,0 +1,25 @@
+version: '3'
+services:
+
+  db:
+    image: mysql:8.0
+    ports:
+      - 3399:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: banco_virtual
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8089:8080
+volumes:
+  mysql_data:
