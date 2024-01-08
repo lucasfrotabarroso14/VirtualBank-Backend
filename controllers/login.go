@@ -41,7 +41,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		responses.Erro(w, http.StatusUnauthorized, erro)
 		return
 	}
-	token, erro := auth.CreateToken(AccountSavedOnDatabase.Account_id)
+	token, erro := auth.CreateToken(AccountSavedOnDatabase.ID_account)
 	if erro != nil {
 		responses.Erro(w, http.StatusInternalServerError, erro)
 		return

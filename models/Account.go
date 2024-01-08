@@ -9,7 +9,7 @@ import (
 )
 
 type Account struct {
-	Account_id     uint64    `json:"account_id,omitempty"`
+	ID_account     uint64    `json:"id_account,omitempty"`
 	Name           string    `json:"name,omitempty"`
 	Email          string    `json:"email,omitempty"`
 	Password       string    `json:"password,omitempty"`

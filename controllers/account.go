@@ -2,12 +2,14 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/database"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/models"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/repositories"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/responses"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 )
 
 func GetAccounts(w http.ResponseWriter, r *http.Request) {
@@ -31,6 +33,7 @@ func GetAccounts(w http.ResponseWriter, r *http.Request) {
 
 func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	bodyRequest, erro := ioutil.ReadAll(r.Body)
+	fmt.Println(httputil.DumpRequest(r, true))
 	if erro != nil {
 		responses.Erro(w, http.StatusUnprocessableEntity, erro)
 	}
@@ -52,11 +55,11 @@ func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	repository := repositories.NewAccountRepository(db)
 
-	account.Account_id, erro = repository.CreateAccount(account)
+	account.ID_account, erro = repository.CreateAccount(account)
 
 	if erro != nil {
 		responses.Erro(w, http.StatusInternalServerError, erro)
 	}
-	responses.JSON(w, http.StatusOK, account)
+	responses.JSON(w, http.StatusCreated, account)
 
 }

@@ -21,7 +21,7 @@ func (repository Account) ListAccounts() ([]models.Account, error) {
 	for linhas.Next() {
 		var account models.Account
 		if erro = linhas.Scan(
-			&account.Account_id,
+			&account.ID_account,
 			&account.Name,
 			&account.Email,
 			&account.Password,
@@ -48,6 +48,7 @@ func (repository Account) CreateAccount(account models.Account) (uint64, error) 
 	}
 
 	defer statement.Close()
+	account.Status = "ATIVO"
 	result, erro := statement.Exec(account.Name, account.Email, account.Password, account.Status, account.Contact_number)
 
 	if erro != nil {
@@ -65,7 +66,7 @@ func (repository Account) CreateAccount(account models.Account) (uint64, error) 
 }
 
 func (repository Account) FindAccountByEmail(email string) (models.Account, error) {
-	line, erro := repository.db.Query("select account_id,password from accounts where email = ?", email)
+	line, erro := repository.db.Query("select id_account,password from accounts where email = ?", email)
 
 	if erro != nil {
 		return models.Account{}, erro
@@ -76,7 +77,7 @@ func (repository Account) FindAccountByEmail(email string) (models.Account, erro
 	var account models.Account
 
 	if line.Next() {
-		if erro = line.Scan(&account.Account_id, &account.Password); erro != nil {
+		if erro = line.Scan(&account.ID_account, &account.Password); erro != nil {
 			return models.Account{}, erro
 		}
 	}
