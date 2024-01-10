@@ -25,3 +25,5 @@ func main() {
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.Port), handler))
 
 }
+
+// migrate -path migrations -database "sua_string_de_conexao" up (para subir as migrations)
