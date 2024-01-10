@@ -17,9 +17,16 @@ func ConfigRoutes(r *mux.Router) *mux.Router {
 	var routes = AccountRoutes
 	routes = append(routes, loginRoute)
 	routes = append(routes, GoalRoutes...)
+	routes = append(routes, WalletRoutes...)
 
 	for _, route := range routes {
-		r.HandleFunc(route.URI, middlewares.Logger(route.Function)).Methods(route.Method)
+		if route.NeedAuth {
+			r.HandleFunc(route.URI,
+				middlewares.Logger(middlewares.Auth(route.Function)),
+			).Methods(route.Method)
+		} else {
+			r.HandleFunc(route.URI, middlewares.Logger(route.Function)).Methods(route.Method)
+		}
 
 	}
 	return r

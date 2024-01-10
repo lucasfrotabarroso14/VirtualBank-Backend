@@ -11,6 +11,31 @@ type Account struct {
 
 func NewAccountRepository(db *sql.DB) *Account { return &Account{db} }
 
+func (repository Account) GetUserInfo(accountID uint64) (models.Account, error) {
+	lines, erro := repository.db.Query("select profile_image, name, email, contact_number from accounts where id_account=?",
+		accountID,
+	)
+	if erro != nil {
+		return models.Account{}, erro
+	}
+	defer lines.Close()
+
+	var account models.Account
+
+	if lines.Next() {
+		if erro = lines.Scan(
+			&account.Profile_image,
+			&account.Name,
+			&account.Email,
+			&account.Contact_number,
+		); erro != nil {
+			return models.Account{}, erro
+		}
+	}
+	return account, nil
+
+}
+
 func (repository Account) ListAccounts() ([]models.Account, error) {
 	linhas, erro := repository.db.Query(`select * from accounts`)
 	if erro != nil {

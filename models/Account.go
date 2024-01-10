@@ -52,7 +52,7 @@ func (account *Account) validate(step string) error {
 }
 
 func (account *Account) format(step string) error {
-	account.Name = strings.TrimSpace(account.Email)
+	account.Name = strings.TrimSpace(account.Name)
 	account.Email = strings.TrimSpace(account.Email)
 
 	if step == "register" {

@@ -18,4 +18,22 @@ var GoalRoutes = []Route{
 		Function: controllers.CreateGoalHandler,
 		NeedAuth: false,
 	},
+	{
+		URI:      "/goals/{id_goal}",
+		Method:   http.MethodGet,
+		Function: controllers.GetGoalByIDHandler,
+		NeedAuth: false,
+	},
+	{
+		URI:      "/goals/{id_goal}",
+		Method:   http.MethodDelete,
+		Function: controllers.DeleteGoalHandler,
+		NeedAuth: false,
+	},
+	{
+		URI:      "/goals/{id_goal}",
+		Method:   http.MethodPut,
+		Function: controllers.UpdateGoalHandler,
+		NeedAuth: false,
+	},
 }

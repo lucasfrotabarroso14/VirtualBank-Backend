@@ -2,14 +2,13 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/lucasfrotabarroso14/VirtualBank-Backend/auth"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/database"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/models"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/repositories"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/responses"
 	"io/ioutil"
 	"net/http"
-	"net/http/httputil"
 )
 
 func GetAccounts(w http.ResponseWriter, r *http.Request) {
@@ -30,10 +29,30 @@ func GetAccounts(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, accounts)
 
 }
+func GetUserInfoHandler(w http.ResponseWriter, r *http.Request) {
+	userID, erro := auth.ExtractUserID(r)
+	if erro != nil {
+		responses.Erro(w, http.StatusUnauthorized, erro)
+		return
+	}
+	db, erro := database.ConnectDB()
+	if erro != nil {
+		responses.Erro(w, http.StatusInternalServerError, erro)
+		return
+	}
+	repository := repositories.NewAccountRepository(db)
+	userInfo, erro := repository.GetUserInfo(userID)
+	if erro != nil {
+		responses.Erro(w, http.StatusBadRequest, erro)
+		return
+	}
+	responses.JSON(w, http.StatusOK, userInfo)
+
+}
 
 func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	bodyRequest, erro := ioutil.ReadAll(r.Body)
-	fmt.Println(httputil.DumpRequest(r, true))
+
 	if erro != nil {
 		responses.Erro(w, http.StatusUnprocessableEntity, erro)
 	}
