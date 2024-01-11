@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/lucasfrotabarroso14/VirtualBank-Backend/models"
 )
 
@@ -31,5 +32,40 @@ func (repository Wallet) GetCurrentBalance(accountID uint64) (models.Wallet, err
 		}
 	}
 	return balance, nil
+
+}
+
+func (repository Wallet) CreateWallet(accountID uint64) error {
+	tx, err := repository.db.Begin()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+
+	}()
+
+	result, err := tx.Exec(`INSERT INTO wallet (id_account,current_balance) values (?,0.0)`, accountID)
+	if err != nil {
+		return err
+	}
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+
+	// Verifica o número de linhas afetadas
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	// Verifica se pelo menos uma linha foi afetada
+	if rowsAffected == 0 {
+		return fmt.Errorf("falha ao criar a carteira para o usuário %d", accountID)
+	}
+
+	return nil
 
 }

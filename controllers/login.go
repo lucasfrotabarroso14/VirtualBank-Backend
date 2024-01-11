@@ -47,5 +47,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responses.JWTtoJSON(w, http.StatusOK, token)
+	responses.JWTjsonResponse(w, http.StatusOK, token)
 }

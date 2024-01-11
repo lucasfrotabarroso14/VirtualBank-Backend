@@ -72,13 +72,21 @@ func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 		responses.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
-	repository := repositories.NewAccountRepository(db)
+	defer db.Close()
 
-	account.ID_account, erro = repository.CreateAccount(account)
+	accountRepository := repositories.NewAccountRepository(db)
+	walletRepository := repositories.NewWalletRepository(db)
 
+	account.ID_account, erro = accountRepository.CreateAccount(account)
 	if erro != nil {
 		responses.Erro(w, http.StatusInternalServerError, erro)
 	}
+
+	if erro := walletRepository.CreateWallet(account.ID_account); erro != nil {
+		responses.Erro(w, http.StatusInternalServerError, erro)
+		return
+	}
+
 	responses.JSON(w, http.StatusCreated, account)
 
 }

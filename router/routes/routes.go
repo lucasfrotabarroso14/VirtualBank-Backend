@@ -18,6 +18,7 @@ func ConfigRoutes(r *mux.Router) *mux.Router {
 	routes = append(routes, loginRoute)
 	routes = append(routes, GoalRoutes...)
 	routes = append(routes, WalletRoutes...)
+	routes = append(routes, TransactionRoute...)
 
 	for _, route := range routes {
 		if route.NeedAuth {

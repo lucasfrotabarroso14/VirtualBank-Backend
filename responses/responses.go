@@ -5,12 +5,15 @@ import (
 	"net/http"
 )
 
+// resposta que o result é uma interface
 type Response struct {
 	StatusCode int         `json:"status_code"`
 	Status     bool        `json:"status"`
 	Message    string      `json:"message"`
 	Result     interface{} `json:"result"`
 }
+
+// respostas quando for retornar o token
 type JWTResponse struct {
 	StatusCode int         `json:"status_code"`
 	Status     bool        `json:"status"`
@@ -18,29 +21,12 @@ type JWTResponse struct {
 	Token      interface{} `json:"token"`
 }
 
-type JSONResponse struct {
+type JSONOwnResponse struct {
 	StatusCode int    `json:"status_code"`
 	Status     bool   `json:"status"`
 	Message    string `json:"message"`
 	Result     string `json:"result"`
 }
-
-//func JSONParamData(w http.ResponseWriter, statusCode int, data string) {
-//
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(statusCode)
-//	response := Response{
-//		StatusCode: statusCode,
-//		Status:     true,
-//		Message:    "success",
-//		Result:     data,
-//	}
-//
-//	if erro := json.NewEncoder(w).Encode(response); erro != nil {
-//		http.Error(w, erro.Error(), http.StatusInternalServerError)
-//	}
-//
-//}
 
 func JSON(w http.ResponseWriter, statusCode int, data interface{}) {
 
@@ -73,7 +59,7 @@ func Erro(w http.ResponseWriter, statusCode int, erro error) {
 	}
 }
 
-func JWTtoJSON(w http.ResponseWriter, statusCode int, data interface{}) {
+func JWTjsonResponse(w http.ResponseWriter, statusCode int, data interface{}) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
@@ -82,6 +68,23 @@ func JWTtoJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 		Status:     true,
 		Message:    "success",
 		Token:      data,
+	}
+
+	if erro := json.NewEncoder(w).Encode(response); erro != nil {
+		http.Error(w, erro.Error(), http.StatusInternalServerError)
+	}
+
+}
+
+func MakeJSONResponse(w http.ResponseWriter, statusCode int, data string) {
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	response := JSONOwnResponse{
+		StatusCode: statusCode,
+		Status:     true,
+		Message:    "success",
+		Result:     data,
 	}
 
 	if erro := json.NewEncoder(w).Encode(response); erro != nil {
