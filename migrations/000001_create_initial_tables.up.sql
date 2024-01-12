@@ -1,3 +1,4 @@
+
 SET NAMES utf8;
 SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
@@ -40,17 +41,17 @@ CREATE TABLE `goals` (
 DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE `transactions` (
                                 `id_transaction` bigint NOT NULL AUTO_INCREMENT,
-                                `id_account` bigint NOT NULL,
+                                `id_origin_account` bigint DEFAULT NULL,
                                 `transaction_type` varchar(255) NOT NULL,
                                 `amount` decimal(10,2) NOT NULL,
                                 `description` varchar(255) DEFAULT NULL,
                                 `category` varchar(255) DEFAULT NULL,
-                                `destination_account_id` bigint DEFAULT NULL,
+                                `id_destination_account` bigint DEFAULT NULL,
                                 PRIMARY KEY (`id_transaction`),
-                                KEY `id_account` (`id_account`),
-                                KEY `destination_account_id` (`destination_account_id`),
-                                CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`id_account`) REFERENCES `wallet` (`id_wallet`),
-                                CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`destination_account_id`) REFERENCES `accounts` (`id_account`)
+                                KEY `id_destination_account` (`id_destination_account`),
+                                KEY `id_origin_account` (`id_origin_account`),
+                                CONSTRAINT `transactions_ibfk_4` FOREIGN KEY (`id_destination_account`) REFERENCES `accounts` (`id_account`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                                CONSTRAINT `transactions_ibfk_5` FOREIGN KEY (`id_origin_account`) REFERENCES `accounts` (`id_account`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
