@@ -2,7 +2,7 @@ package models
 
 type Transaction struct {
 	IDtransaction        uint64  `json:"id_transaction, omitempty"`
-	IDaccount            uint64  `json:"id_account, omitempty"`
+	IDoriginAccount      uint64  `json:"id_origin_account, omitempty"`
 	TransactionType      string  `json:"transaction_type, omitempty"`
 	Amount               float64 `json:"amount, omitempty"`
 	Description          string  `json:"description, omitempty"`

@@ -29,7 +29,7 @@ func MakeTransactionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	transaction.IDaccount = accountID
+	transaction.IDoriginAccount = accountID
 	db, err := database.ConnectDB()
 
 	if err != nil {
