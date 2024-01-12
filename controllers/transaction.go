@@ -49,3 +49,28 @@ func MakeTransactionHandler(w http.ResponseWriter, r *http.Request) {
 	responses.MakeJSONResponse(w, http.StatusCreated, "Transferência realizada com sucesso")
 
 }
+
+func GetUserTransactionsHandler(w http.ResponseWriter, r *http.Request) {
+	accountID, err := auth.ExtractUserID(r)
+	if err != nil {
+		responses.Erro(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	db, err := database.ConnectDB()
+	if err != nil {
+		responses.Erro(w, http.StatusInternalServerError, err)
+		return
+	}
+	defer db.Close()
+
+	repository := repositories.NewTransactionRepository(db)
+
+	transactions, err := repository.GetUserTransactions(accountID)
+	if err != nil {
+		responses.Erro(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, transactions)
+
+}

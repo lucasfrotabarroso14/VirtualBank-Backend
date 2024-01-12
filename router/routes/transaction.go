@@ -7,9 +7,15 @@ import (
 
 var TransactionRoute = []Route{
 	{
-		URI:      "/transaction",
+		URI:      "/transactions",
 		Method:   http.MethodPost,
 		Function: controllers.MakeTransactionHandler,
+		NeedAuth: false,
+	},
+	{
+		URI:      "/transactions",
+		Method:   http.MethodGet,
+		Function: controllers.GetUserTransactionsHandler,
 		NeedAuth: false,
 	},
 }

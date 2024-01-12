@@ -112,3 +112,34 @@ func (repository Transaction) MakeTransaction(transaction models.Transaction) (u
 
 	return uint64(lastIDInserted), nil
 }
+
+func (repository Transaction) GetUserTransactions(accountID uint64) ([]models.Transaction, error) {
+	lines, err := repository.db.Query(`select a1.name,t.amount,t.transaction_type,a2.name
+	from transactions t
+    inner join accounts a1 on t.id_origin_account = a1.id_account
+	inner join accounts  a2 on t.id_destination_account = a2.id_account
+	where t.id_origin_account = ?`, accountID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer lines.Close()
+
+	var transactions []models.Transaction
+
+	for lines.Next() {
+		var transaction models.Transaction
+		if err = lines.Scan(
+			&transaction.AccountOriginName,
+			&transaction.Amount,
+			&transaction.TransactionType,
+			&transaction.AccountDestinationName,
+		); err != nil {
+			return nil, err
+		}
+		transactions = append(transactions, transaction)
+	}
+	return transactions, nil
+
+}
