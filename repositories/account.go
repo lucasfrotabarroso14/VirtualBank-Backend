@@ -108,3 +108,23 @@ func (repository Account) FindAccountByEmail(email string) (models.Account, erro
 	}
 	return account, nil
 }
+
+func (repository Account) UpdateAccount(account models.Account) error {
+	statement, err := repository.db.Prepare("UPDATE accounts set name = ?, email = ?, status = ?, contact_number = ?, profile_image=? WHERE id_account = ?")
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	if _, err = statement.Exec(
+		&account.Name,
+		&account.Email,
+		&account.Status,
+		&account.Contact_number,
+		&account.Profile_image,
+		&account.ID_account,
+	); err != nil {
+		return err
+	}
+	return nil
+}

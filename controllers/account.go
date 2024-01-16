@@ -90,3 +90,35 @@ func CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, account)
 
 }
+
+func UpdateAccountHandler(w http.ResponseWriter, r *http.Request) {
+	accountID, err := auth.ExtractUserID(r)
+	if err != nil {
+		responses.Erro(w, http.StatusUnauthorized, err)
+		return
+	}
+	requestBody, err := ioutil.ReadAll(r.Body)
+	var account models.Account
+	if err = json.Unmarshal(requestBody, &account); err != nil {
+		responses.Erro(w, http.StatusBadRequest, err)
+		return
+	}
+	account.ID_account = accountID
+
+	db, err := database.ConnectDB()
+
+	if err != nil {
+		responses.Erro(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	defer db.Close()
+
+	repository := repositories.NewAccountRepository(db)
+
+	if err = repository.UpdateAccount(account); err != nil {
+		responses.Erro(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.MakeJSONResponse(w, http.StatusOK, "Atualizado com sucesso")
+}

@@ -24,4 +24,10 @@ var AccountRoutes = []Route{
 		Function: controllers.GetUserInfoHandler,
 		NeedAuth: false,
 	},
+	{
+		URI:      "/user",
+		Method:   http.MethodPut,
+		Function: controllers.UpdateAccountHandler,
+		NeedAuth: false,
+	},
 }
