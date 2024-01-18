@@ -99,6 +99,7 @@ func UpdateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	requestBody, err := ioutil.ReadAll(r.Body)
 	var account models.Account
+
 	if err = json.Unmarshal(requestBody, &account); err != nil {
 		responses.Erro(w, http.StatusBadRequest, err)
 		return

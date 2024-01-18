@@ -1,4 +1,3 @@
-
 SET NAMES utf8;
 SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
@@ -16,7 +15,7 @@ CREATE TABLE `accounts` (
                             `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                             `contact_number` varchar(20) DEFAULT NULL,
-                            `profile_image` blob,
+                            `profile_image` varbinary(1024) DEFAULT NULL,
                             PRIMARY KEY (`id_account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
